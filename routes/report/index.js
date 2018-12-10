@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-//router.use('/stu', require('./stu.js'));
+router.use('/list', require('./list.js'));
 router.use('/', require('./report.js'));
 
-//router.use('/pro', require('./pro.js'));
-//router.use('/form', require('./form.js'));
+router.use('/feedback', require('./feedback.js'));
+router.use('/form', require('./form.js'));
 
 module.exports = router;

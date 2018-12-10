@@ -5,45 +5,50 @@ const moment = require('moment');
 const db = require('../../module/pool.js');
 const jwt = require('../../module/jwt.js');
 
-router.get('/', async function(req, res){ 
-    let token=req.headers.token; 
-    let user_user_idx; //접속되어 있는 유저
-
-    if(token){
-
-        let decoded = jwt.verify(token);
+router.get('/:usr_id', async function(req, res){ //유저 정보 보기
+    let usr_idx = req.params.usr_id; 
+    if(!usr_idx){
+        res.status(401).send({
+            message : "null value"
+        });
     
-        if (decoded == -1){
-            res.status(500).send({
-                message : "Token error"
-            }); 
-        }
-        user_user_idx = decoded.user_idx;
-    }
-    else{
-            res.status(403).send({
-                message : "no token"
-            }); 
         return;
     }
-
-    let checkLikeInBoard = 'select usr_name, usr_img from HalAe.user where usr_id = ?'; 
-    let checkLikeInBoardRes = await db.queryParam_Arr(checkLikeInBoard, [user_user_idx]); 
-    
-    if(!checkLikeInBoardRes){
+    let sortAlarmQuery =`SELECT pro_name, report_check FROM sys.report, sys.professor where report_pro=pro_id and report_usr=? and report_check !=0 order by report_checkdate, report_feeddate desc;`;
+    try{
+      let checkalarm = await db.queryParam_Arr(sortAlarmQuery,[usr_idx]);
+      if(!checkalarm){
         res.status(500).send({
             message : "Internal Server Error"
         });
         return;
+      }
+      else if(checkalarm.length>0){
+        let data_res=[];
+        for(var i=0;i<checkalarm.length;i++){
+          if(checkalarm[i].report_check ==1)
+            data_res.push(checkalarm[i].pro_name+" 교수님이 확인하셨습니다.");
+          else if (checkalarm[i].report_check ==2)
+            data_res.push(checkalarm[i].pro_name+" 교수님이 피드백을 남기셨습니다.");
+        }
+        res.status(201).send({
+          message : "success",
+          data:data_res
+        });
+        return;
+      }
+      else{
+        res.status(202).send({
+          message : "there is no alarm"
+        });
+        return;
+      }
+    }catch(err){
+      res.status(500).send({
+        message : "Internal Server Error"
+      });
+      return;
     }
-
-    
-    res.status(201).send({
-        message : "Successfully get user_info", 
-        usr_name : checkLikeInBoardRes[0].usr_name,
-        usr_img : checkLikeInBoardRes[0].usr_img
-    }); 
-    
-});
+  });
 
 module.exports = router;

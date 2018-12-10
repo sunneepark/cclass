@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const secretKey = require('../config/secretKey.js').secret; 
 
 module.exports = {
     sign : function(user_idx){ 
@@ -10,14 +9,14 @@ module.exports = {
         const payload = {  
             user_idx : user_idx
         }; 
-        let token = jwt.sign(payload, secretKey, options);
+        let token = jwt.sign(payload, "sdfs", options);
         return token; 
     }, 
 
     verify : function(token) { 
         let decoded; 
         try {
-            decoded = jwt.verify(token, secretKey); 
+            decoded = jwt.verify(token, "sdfs"); 
         }
         catch(err) {
             if(err.message === 'jwt expired') console.log('expired token');
