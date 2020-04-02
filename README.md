@@ -92,11 +92,8 @@ npm start
 ## Nginx 설정
 **웹서버 접속 후, 진행**
 1. sudo apt update -y && sudo apt-get install nginx -y
-</br>
 2. sudo systemctl status nginx
-</br>
 3. sudo systemctl start nginx , sudo systemctl enable nginx
-</br>
 4. Nginx 설정파일 수정 ```sudo vi /etc/nginx/sites-available/defalut```
 
 ```javascript
@@ -125,7 +122,6 @@ server {
 
 }
 ```
-</br>
 5. sudo service nginx restart
 
 ## ScreenShots
