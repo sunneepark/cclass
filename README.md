@@ -15,7 +15,7 @@
 * Node.js
 * express.js
 * AWS infra(RDS, EC2, SSL, S3)
-* RestFul API ```JSON 형식으로 End Point에 뿌려줌.``` (Swagger API)
+* RestFul API ```JSON 형식으로 End Point에 뿌려줌.```
 
 * 웹페이지 연동으로 인한 ```var cors = require('cors'); app.use(cors());``` 로 cors 설정
 
